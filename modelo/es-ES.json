@@ -1,0 +1,707 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "<RELLENAR INVOCATION NAME>",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": [
+                        "cancela",
+                        "cancelar"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "necesito ayuda",
+                        "help me",
+                        "help",
+                        "ayudame",
+                        "ayuda"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": [
+                        "termina",
+                        "terminar",
+                        "salte",
+                        "salir",
+                        "para",
+                        "stop"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "NuevoProductoIntent",
+                    "slots": [
+                        {
+                            "name": "nombreProducto",
+                            "type": "AMAZON.Food"
+                        },
+                        {
+                            "name": "mete",
+                            "type": "meteSlot"
+                        },
+                        {
+                            "name": "elLaProducto",
+                            "type": "elLaProducto"
+                        },
+                        {
+                            "name": "fechaCaducidad",
+                            "type": "AMAZON.DATE",
+                            "samples": [
+                                "{fechaCaducidad}",
+                                "la fecha de caducidad de {elLaProducto} {nombreProducto} es {fechaCaducidad}",
+                                "{elLaProducto} {nombreProducto} caduca {fechaCaducidad}",
+                                "{nombreProducto} caduca {fechaCaducidad}",
+                                "la fecha de caducidad es {fechaCaducidad}",
+                                "caduca {fechaCaducidad}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "{mete} {nombreProducto} que caduca {fechaCaducidad}",
+                        "{mete} {elLaProducto}  {nombreProducto}",
+                        "{mete} {nombreProducto}"
+                    ]
+                },
+                {
+                    "name": "QuitarProductoIntent",
+                    "slots": [
+                        {
+                            "name": "nombreProducto",
+                            "type": "AMAZON.Food"
+                        },
+                        {
+                            "name": "saca",
+                            "type": "sacaSlot"
+                        },
+                        {
+                            "name": "elLaProducto",
+                            "type": "elLaProducto"
+                        }
+                    ],
+                    "samples": [
+                        "{saca} {elLaProducto} {nombreProducto}",
+                        "{saca} {nombreProducto}"
+                    ]
+                },
+                {
+                    "name": "InfoProductoIntent",
+                    "slots": [
+                        {
+                            "name": "nombreProducto",
+                            "type": "AMAZON.Food",
+                            "samples": [
+                                "la {nombreProducto}",
+                                "el {nombreProducto}",
+                                "se llama {nombreProducto}",
+                                "{nombreProducto}"
+                            ]
+                        },
+                        {
+                            "name": "cuandoInfo",
+                            "type": "cuandoInfoSlot"
+                        },
+                        {
+                            "name": "elLaProducto",
+                            "type": "elLaProducto"
+                        }
+                    ],
+                    "samples": [
+                        "{cuandoInfo} {nombreProducto}",
+                        "{cuandoInfo} {elLaProducto} {nombreProducto}"
+                    ]
+                },
+                {
+                    "name": "ListadoIntent",
+                    "slots": [],
+                    "samples": [
+                        "ver listado",
+                        "lista completa",
+                        "listado completo",
+                        "listado",
+                        "dime la lista de productos",
+                        "dime la lista de cosas",
+                        "dime la lista",
+                        "dime qué hay",
+                        "dime qué tengo",
+                        "dime qué tengo en la nevera",
+                        "qué hay en la nevera"
+                    ]
+                },
+                {
+                    "name": "AbrirProductoIntent",
+                    "slots": [
+                        {
+                            "name": "abro",
+                            "type": "abreSlot"
+                        },
+                        {
+                            "name": "nombreProducto",
+                            "type": "AMAZON.Food",
+                            "samples": [
+                                "la {nombreProducto}",
+                                "el {nombreProducto}",
+                                "se llama {nombreProducto}",
+                                "{nombreProducto}"
+                            ]
+                        },
+                        {
+                            "name": "elLaProducto",
+                            "type": "elLaProducto"
+                        },
+                        {
+                            "name": "fechaCaducidadAbierto",
+                            "type": "AMAZON.DATE",
+                            "samples": [
+                                "La nueva fecha de caducidad será {fechaCaducidadAbierto}",
+                                "La nueva fecha de caducidad es {fechaCaducidadAbierto}",
+                                "La nueva fecha será {fechaCaducidadAbierto}",
+                                "La nueva fecha es {fechaCaducidadAbierto}",
+                                "{elLaProducto} {nombreProducto} caducará {fechaCaducidadAbierto}",
+                                "{nombreProducto} caduca {fechaCaducidadAbierto}",
+                                "{fechaCaducidadAbierto}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "{abro} {elLaProducto} {nombreProducto}",
+                        "{abro} {nombreProducto}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "meteSlot",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "nueva"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "añadir"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "añade"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "incluye"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "nuevo"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "meto"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "meter"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "mete"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "elLaProducto",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "producto"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "un producto"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "una"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "un"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "el producto"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "la"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "el"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "sacaSlot",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "olvida",
+                                "synonyms": [
+                                    "olvidar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "comido",
+                                "synonyms": [
+                                    "ya nos hemos comido",
+                                    "nos hemos comido",
+                                    "ya me he comido",
+                                    "me he comido"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "tira",
+                                "synonyms": [
+                                    "ya hemos tirado",
+                                    "ya tiré",
+                                    "tirar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "acabado",
+                                "synonyms": [
+                                    "ya nos hemos acabado",
+                                    "ya me he acabado",
+                                    "nos hemos acabado",
+                                    "me he acabado"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "elimina",
+                                "synonyms": [
+                                    "eliminar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "quita",
+                                "synonyms": [
+                                    "quitar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "borra",
+                                "synonyms": [
+                                    "borrar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "saca",
+                                "synonyms": [
+                                    "sacar"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "abreSlot",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "empecé"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "acabo de empezar",
+                                "synonyms": [
+                                    "empiezo",
+                                    "acabamos de empezar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "acabo de abrir",
+                                "synonyms": [
+                                    "acabamos de abrir"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "abrí"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "he abierto"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "abro"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "abrir"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "abre"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "cuandoInfoSlot",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "dime info"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dame info"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "info"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "información"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dime información de"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dame información de"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuándo hice",
+                                "synonyms": [
+                                    "cuándo cociné"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuándo guardé",
+                                "synonyms": [
+                                    "cuándo guardamos"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuándo traje",
+                                "synonyms": [
+                                    "cuándo trajimos"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuándo compré",
+                                "synonyms": [
+                                    "cuándo compramos"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuándo añadí",
+                                "synonyms": [
+                                    "cuándo añadimos"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuándo di de alta",
+                                "synonyms": [
+                                    "cuándo dimos de alta"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuándo"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "QuitarProductoIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "nombreProducto",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1046678540380.247893876241"
+                            }
+                        },
+                        {
+                            "name": "saca",
+                            "type": "sacaSlot",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "elLaProducto",
+                            "type": "elLaProducto",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "NuevoProductoIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "nombreProducto",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.631888197254.901111424685"
+                            }
+                        },
+                        {
+                            "name": "mete",
+                            "type": "meteSlot",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "elLaProducto",
+                            "type": "elLaProducto",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "fechaCaducidad",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.631888197254.686001760166"
+                            },
+                            "validations": [
+                                {
+                                    "type": "isGreaterThan",
+                                    "prompt": "Slot.Validation.145910752276.1218477350027.1471039100711",
+                                    "value": "2019-01-01"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "InfoProductoIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "nombreProducto",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1200253382329.1036021747304"
+                            }
+                        },
+                        {
+                            "name": "cuandoInfo",
+                            "type": "cuandoInfoSlot",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "elLaProducto",
+                            "type": "elLaProducto",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "AbrirProductoIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "abro",
+                            "type": "abreSlot",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "nombreProducto",
+                            "type": "AMAZON.Food",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.605987526589.1220745472555"
+                            }
+                        },
+                        {
+                            "name": "elLaProducto",
+                            "type": "elLaProducto",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "fechaCaducidadAbierto",
+                            "type": "AMAZON.DATE",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1431855871185.221916001094"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1046678540380.247893876241",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Cómo se llama el producto que tengo que borrar?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.631888197254.901111424685",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Cómo se llama el producto nuevo?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.631888197254.686001760166",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿qué fecha de caducidad tiene?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "¿cuál es su fecha de caducidad?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1200253382329.1036021747304",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Cómo se llama el producto que quieres consultar?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.605987526589.1220745472555",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Cómo se llama el producto que acabas de abrir?"
+                    }
+                ]
+            },
+            {
+                "id": "Slot.Validation.145910752276.1218477350027.1471039100711",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Dime una fecha de caducidad válida. También puedes decir 'próximo lunes', 'hoy', o 'mañana'."
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1431855871185.221916001094",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "¿Cuándo caducará ahora {nombreProducto} ?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "¿Cuál será su fecha de caducidad ahora que {nombreProducto} está abierto?"
+                    }
+                ]
+            }
+        ]
+    }
+}

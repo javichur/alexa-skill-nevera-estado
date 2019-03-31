@@ -1,0 +1,23 @@
+{
+  "name": "Nevera-estado",
+  "version": "2.0.0",
+  "description": "Anota la comida que tienes, cuándo la abriste y cuándo caduca",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "alexa",
+    "skill",
+    "nevera",
+    "frigoríco",
+    "despensa"
+  ],
+  "author": "Javier Campos",
+  "license": "MIT",
+  "dependencies": {
+    "ask-sdk-core": "^2.0.0",
+    "ask-sdk-model": "^1.0.0",
+    "moment-timezone": "^0.5.23"
+  }
+}
