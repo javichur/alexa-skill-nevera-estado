@@ -11,8 +11,8 @@
 /* 1. Cargamos las dependencias. */
 const Alexa = require('ask-sdk-core');
 
-const DBHelper = require('./helpers/dbHelper');
-let myDb = new DBHelper("skill-alexa-la-nevera-2", "userId", "productName"); // editar según tu tabla DynamoDB
+const dynamola = require('dynamola');
+let myDb = new dynamola("skill-alexa-la-nevera-2", "userId", "productName"); // editar según tu tabla DynamoDB
 const NOMBRE_NEVERA_GENERICA = "casa";
 const ATTR_NAME = "productos";
 
