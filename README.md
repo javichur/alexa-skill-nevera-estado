@@ -46,14 +46,15 @@ Para reutilizar esta skill, recuerda hacer estos cambios:
 
     6.2. Añade la política recién creada al rol de ejecución de la función lambda de tu skill (https://console.aws.amazon.com/iam/home?#/roles).
 
-## Cómo usar dbHelper:
+## Cómo usar Dynamola, para acceso fácil a DynamoDB:
 
-No hace falta editar el fichero dbHelper.js. Simplemente, desde el código de tu aplicación node escribe algo así:
+1. Añadir módulo al proyecto: npm install dynamola
+
+2. Usar constructor así:
 
 ```
-
-const DBHelper = require('./helpers/dbHelper');
-let myDb = new DBHelper("nombre-tabla-en-dynamodb", "nombre-primary-key-en-dynamodb", null);
+const Dynamola = require('dynamola');
+let myDb = new Dynamola("nombre-tabla-en-dynamodb", "nombre-primary-key-en-dynamodb", null);
 
 myDb.getItem(userID).then((data) => {
     if(!data){
