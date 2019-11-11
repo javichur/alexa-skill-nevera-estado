@@ -1,5 +1,6 @@
 /* eslint-disable  func-names */
 /* eslint-disable  no-console */
+/* eslint-disable global-require */
 
 /* Skill "Nevera estado".
  * Creada por Javier Campos (https://javiercampos.es).
@@ -10,45 +11,40 @@
 
 /* 1. Cargamos las dependencias. */
 const Alexa = require('ask-sdk-core');
-
 const Dynamola = require('dynamola');
+const moment = require('moment-timezone');
+
+const Settings = require('./settings.js');
 
 // editar siguientes líneas según tu tabla DynamoDB
-const myDb = new Dynamola('skill-alexa-la-nevera-2', 'userId', 'productName');
+const myDb = new Dynamola(Settings.TABLE_NAME_DYNAMODB, Settings.PARTITION_KEY_NAME,
+  Settings.SORT_KEY_NAME);
 const NOMBRE_NEVERA_GENERICA = 'casa';
 const ATTR_NAME = 'productos';
 
-
-const moment = require('moment-timezone');
+/* 2. Cadenas e idioma */
+const LOC = {
+  t: null, // cadenas de texto localizadas. Se inicializa en myLocalizationInterceptor()
+  langSkill: null, // current language ('es-ES', 'en-US', 'en', etc...)
+};
 
 const skillBuilder = Alexa.SkillBuilders.custom();
 
 /* 2. Constantes */
-const SKILL_NAME = 'Nevera estado';
-const DIME_POR_EJEMPLO = 'Dime por ejemplo: "meto leche", "abro la mayonesa", "info guacamole", "borra el pollo" o "ver listado". También puedes salir. ¿Qué dices?';
-const HELP_MESSAGE = 'Anota aquí la comida que compras, cuándo la abriste y cuándo caduca. ';
-const STOP_MESSAGE = '<say-as interpret-as="interjection">Hasta luego</say-as>';
-const NO_ENTIENDO_REPITE_POR_FAVOR = '<say-as interpret-as="interjection">¿cómorr?</say-as>. Lo siento, no te he entendido. Repite por favor. ';
-const NEVERA_VACIA = 'La nevera está vacía. ';
-const ERROR_AL_INTENTAR_RECORDAR = 'Error al intentar recordar lo que tienes en la nevera. Vuelve a intentarlo. ';
-const ERROR_AL_ABRIR_PRODUCTO = 'Error al marcar como abierto el producto. Vuelve a intentarlo. ';
-const ERROR_AL_BORRAR_PRODUCTO = 'Error borrando. Vuelve a intentarlo. ';
-const ERROR_INESPERADO = 'Ha ocurrido un error. ';
-
 const MILISEGSDIARIOS = 86400000;
 
 function msgAndTell(msg, handlerInput) {
   return handlerInput.responseBuilder
-    .speak(msg + DIME_POR_EJEMPLO)
-    .withSimpleCard(SKILL_NAME, msg)
+    .speak(msg + LOC.t.DIME_POR_EJEMPLO)
+    .withSimpleCard(LOC.t.SKILL_NAME, msg)
     .reprompt(msg)
     .getResponse();
 }
 
 function msgAndStop(msg, handlerInput) {
   return handlerInput.responseBuilder
-    .speak(msg + STOP_MESSAGE)
-    .withSimpleCard(SKILL_NAME, msg)
+    .speak(msg + LOC.t.STOP_MESSAGE)
+    .withSimpleCard(LOC.t.SKILL_NAME, msg)
     .withShouldEndSession(true)
     .getResponse();
 }
@@ -70,7 +66,7 @@ function listToVoiceString(list, attrName) {
   for (let i = 0; i < list.length; i += 1) {
     ret += (attrName) ? list[i][attrName] : list[i];
     if (i < list.length - 2) ret += ', ';
-    else if (i == list.length - 2) ret += ' y ';
+    else if (i === list.length - 2) ret += ` ${LOC.t.Y} `;
   }
   return ret;
 }
@@ -107,7 +103,7 @@ async function obtenerListaDeSessionOrDB(keyValue, sortValue, attrName, attribut
 }
 
 function resumenDeUnTipoDeProducto(list, tipoSingular, tipoPlural) {
-  if (list.length == 1) {
+  if (list.length === 1) {
     return `${list[0]} ${tipoSingular}. `;
   }
   if (list.length > 1) {
@@ -119,21 +115,21 @@ function resumenDeUnTipoDeProducto(list, tipoSingular, tipoPlural) {
 function resumenNevera(listCaducanHoyCerradoOAbierto, listCaducanMananaCerradoOAbierto,
   listCaducanPasadoMananaCerradoOAbierto, listCaducadoCerradoOAbierto) {
   let strResumen = '';
-  if (listCaducanHoyCerradoOAbierto.length == 0
-    && listCaducanMananaCerradoOAbierto.length == 0
-    && listCaducanPasadoMananaCerradoOAbierto.length == 0) {
-    strResumen = 'Ningún producto caduca en los próximos 2 días. ';
+  if (listCaducanHoyCerradoOAbierto.length === 0
+    && listCaducanMananaCerradoOAbierto.length === 0
+    && listCaducanPasadoMananaCerradoOAbierto.length === 0) {
+    strResumen = LOC.t.NINGUN_PRODUCTO_CADUCA_PROXIMOS_2_DIAS;
   } else {
     strResumen = resumenDeUnTipoDeProducto(listCaducanHoyCerradoOAbierto,
-      'caduca hoy', 'caducan hoy');
+      LOC.t.CADUCA_HOY, LOC.t.CADUCAN_HOY);
     strResumen += resumenDeUnTipoDeProducto(listCaducanMananaCerradoOAbierto,
-      'caduca mañana', 'caducan mañana');
+      LOC.t.CADUCA_MANANA, LOC.t.CADUCAN_MANANA);
     strResumen += resumenDeUnTipoDeProducto(listCaducanPasadoMananaCerradoOAbierto,
-      'caduca pasado mañana', 'caducan pasado mañana');
+      LOC.t.CADUCA_PASADO_MANANA, LOC.t.CADUCAN_PASADO_MANANA);
   }
 
   strResumen += resumenDeUnTipoDeProducto(listCaducadoCerradoOAbierto,
-    ' ya caducó', 'ya caducaron');
+    LOC.t.YA_HA_CADUCADO, LOC.t.YA_HAN_CADUCADO);
 
   return strResumen;
 }
@@ -165,7 +161,7 @@ async function obtenerTimezoneDeSessionOrApi(requestEnvelope, serviceClientFacto
  * caducidad del envase.
  */
 function buscarCaducadosYProximosCaducados(data, timezone) {
-  moment.locale('es'); // para que diga meses en castellano.
+  moment.locale(LOC.langSkill); // para que diga meses en idioma correspondiente.
 
   const hoyTime = fechaStringUtcToMilliseconds(fechaHoyUserToStringYYYYMMDD(timezone));
 
@@ -187,25 +183,25 @@ function buscarCaducadosYProximosCaducados(data, timezone) {
     if (fCaducidadAbierto != null && fCaducidadAbierto.getTime() < hoyTime) {
       // caducado por estar abierto
       listCaducadoCerradoOAbierto.unshift(name);
-    } else if (fCaducidadAbierto != null && fCaducidadAbierto.getTime() == hoyTime) {
+    } else if (fCaducidadAbierto !== null && fCaducidadAbierto.getTime() === hoyTime) {
       // abierto y caduca hoy por abierto
       listCaducanHoyCerradoOAbierto.unshift(name);
     } else if (fCaducidadAbierto != null
-      && fCaducidadAbierto.getTime() == hoyTime + MILISEGSDIARIOS) {
+      && fCaducidadAbierto.getTime() === hoyTime + MILISEGSDIARIOS) {
       // abierto y caduca MAÑANA por abierto
       listCaducanMananaCerradoOAbierto.unshift(name);
     } else if (fCaducidadAbierto != null
-      && fCaducidadAbierto.getTime() == hoyTime + 2 * MILISEGSDIARIOS) {
+      && fCaducidadAbierto.getTime() === hoyTime + 2 * MILISEGSDIARIOS) {
       // abierto y caduca PASADO MAÑANA por abierto
       listCaducanPasadoMananaCerradoOAbierto.unshift(name);
     } else if (fCaducidadCerrado.getTime() < hoyTime) { // caducado según fecha envase
       listCaducadoCerradoOAbierto.unshift(name);
-    } else if (fCaducidadCerrado.getTime() == hoyTime) { // caduca HOY según fecha envase
+    } else if (fCaducidadCerrado.getTime() === hoyTime) { // caduca HOY según fecha envase
       listCaducanHoyCerradoOAbierto.unshift(name);
-    } else if (fCaducidadCerrado.getTime() == hoyTime + MILISEGSDIARIOS) {
+    } else if (fCaducidadCerrado.getTime() === hoyTime + MILISEGSDIARIOS) {
       // caduca MAÑANA según fecha envase
       listCaducanMananaCerradoOAbierto.unshift(name);
-    } else if (fCaducidadCerrado.getTime() == hoyTime + 2 * MILISEGSDIARIOS) {
+    } else if (fCaducidadCerrado.getTime() === hoyTime + 2 * MILISEGSDIARIOS) {
       // caduca PASADO MAÑANA según fecha envase
       listCaducanPasadoMananaCerradoOAbierto.unshift(name);
     }
@@ -235,19 +231,19 @@ const LaunchRequestHandler = {
 
     const list = await obtenerListaDeSessionOrDB(userId, NOMBRE_NEVERA_GENERICA, ATTR_NAME,
       attributesManager);
-    if (list == null) {
-      return msgAndStop(ERROR_AL_INTENTAR_RECORDAR, handlerInput);
+    if (list === null) {
+      return msgAndStop(LOC.t.ERROR_AL_INTENTAR_RECORDAR, handlerInput);
     }
-    if (list.length == 0) {
-      return msgAndTell(NEVERA_VACIA, handlerInput);
+    if (list.length === 0) {
+      return msgAndTell(LOC.t.NEVERA_VACIA, handlerInput);
     }
 
     // generar aviso de caducidad
     const strCaducadosOCasi = buscarCaducadosYProximosCaducados(list, timezone);
 
     let strTotal = '';
-    if (list.length == 1) strTotal = 'Hay solo 1 producto en la nevera. ';
-    else strTotal = `Hay ${list.length} productos en la nevera. `;
+    if (list.length === 1) strTotal = LOC.t.SOLO_HAY_1_PRODUCTO_EN_NEVERA;
+    else strTotal = LOC.t.HAY_X_PRODUCTOS_EN_NEVERA.replace('{0}', list.length);
 
     return msgAndTell(strTotal + strCaducadosOCasi, handlerInput);
   },
@@ -272,15 +268,16 @@ const NuevoProductoHandler = {
 
     const list = await obtenerListaDeSessionOrDB(userId, NOMBRE_NEVERA_GENERICA, ATTR_NAME,
       attributesManager);
-    if (list == null) {
-      return msgAndStop(ERROR_AL_INTENTAR_RECORDAR, handlerInput);
+    if (list === null) {
+      return msgAndStop(LOC.t.ERROR_AL_INTENTAR_RECORDAR, handlerInput);
     }
 
     for (let i = 0; i < list.length; i += 1) {
-      if (list[i].name == nameProductSlot) {
+      if (list[i].name === nameProductSlot) {
+        const diOtro = LOC.t.DI_OTRO_O_BORRA.replace('{0}', nameProductSlot);
         return handlerInput.responseBuilder
-          .speak(`Ya hay ${nameProductSlot} en tu nevera. Por favor di otro nombre o di 'borra ${nameProductSlot}'.`)
-          .reprompt(`Por favor di otro nombre o di 'borra ${nameProductSlot}'.`)
+          .speak(LOC.t.YA_HAY_X.replace('{0}', nameProductSlot) + diOtro)
+          .reprompt(diOtro)
           .getResponse();
       }
     }
@@ -309,10 +306,14 @@ const NuevoProductoHandler = {
 
     // guardar en bbdd. OJO, es con "update"
     return myDb.updateItemWithPrimarySortKey(userId, NOMBRE_NEVERA_GENERICA, itemAttributes)
-      .then(data => msgAndStop(`Guardado ${nameProductSlot}, que caduca ${fCaducidadSlot}. `, handlerInput))
+      .then(() => {
+        let msg = LOC.t.GUARDADO_X_QUE_CADUCA_EN_Y.replace('{0}', nameProductSlot);
+        msg = msg.replace('{1}', fCaducidadSlot);
+        return msgAndStop(msg, handlerInput);
+      })
       .catch((err) => {
-        console.log(`Error guardando, vuelve a intentarlo. ${err}`);
-        return msgAndStop('Error guardando. Vuelve a intentarlo. ', handlerInput);
+        console.log(`${LOC.t.ERROR_GUARDANDO}${err}`);
+        return msgAndStop(LOC.t.ERROR_GUARDANDO, handlerInput);
       });
   },
 };
@@ -332,23 +333,24 @@ const QuitarProductoHandler = {
 
     const list = await obtenerListaDeSessionOrDB(userId, NOMBRE_NEVERA_GENERICA, ATTR_NAME,
       attributesManager);
-    if (list == null) {
-      return msgAndStop(ERROR_AL_INTENTAR_RECORDAR, handlerInput);
+    if (list === null) {
+      return msgAndStop(LOC.t.ERROR_AL_INTENTAR_RECORDAR, handlerInput);
     }
 
     let encontradoQ = false;
     for (let i = 0; i < list.length; i += 1) {
-      if (list[i].name == nameProductSlot) {
+      if (list[i].name === nameProductSlot) {
         encontradoQ = true;
         list.splice(i, 1); // elimina item
         break;
       }
     }
 
-    if (encontradoQ == false) {
+    if (encontradoQ === false) {
+      const msg = LOC.t.NO_HE_ENCONTRADO_X.replace('{0}', nameProductSlot) + LOC.t.DI_BORRAR_SEGUIDO_NOMBRE;
       return handlerInput.responseBuilder
-        .speak(`No he encontrado ${nameProductSlot} en tu nevera. Di 'borrar' y el nombre del producto que quieras borrar.`)
-        .reprompt("Di 'borrar' y el nombre del producto que quieras borrar.")
+        .speak(msg)
+        .reprompt(LOC.t.DI_BORRAR_SEGUIDO_NOMBRE)
         .getResponse();
     }
 
@@ -362,10 +364,10 @@ const QuitarProductoHandler = {
 
     // guardar en bbdd. OJO! es con update.
     return myDb.updateItemWithPrimarySortKey(userId, NOMBRE_NEVERA_GENERICA, itemAttributes)
-      .then(data => msgAndStop(`Eliminado ${nameProductSlot}. `, handlerInput))
+      .then(() => msgAndStop(LOC.t.ELIMINADO_X.replace('{0}', nameProductSlot), handlerInput))
       .catch((err) => {
         console.log(`Error eliminando. ${err}`);
-        return msgAndStop(ERROR_AL_BORRAR_PRODUCTO, handlerInput);
+        return msgAndStop(LOC.t.ERROR_AL_BORRAR_PRODUCTO, handlerInput);
       });
   },
 };
@@ -379,18 +381,22 @@ function fechaStringToVoiceString(strFecha, timezone) {
 
   const hoyTime = fechaStringUtcToMilliseconds(fechaHoyUserToStringYYYYMMDD(timezone));
 
-  if (fTime == hoyTime) return { string: 'hoy', compare: PRESENTE };
-  if (fTime == hoyTime - MILISEGSDIARIOS) return { string: 'ayer', compare: PASADO };
-  if (fTime == hoyTime - 2 * MILISEGSDIARIOS) return { string: 'hace 2 días', compare: PASADO };
-  if (fTime == hoyTime + MILISEGSDIARIOS) return { string: 'mañana', compare: FUTURO };
-  if (fTime == hoyTime + 2 * MILISEGSDIARIOS) return { string: 'pasado mañana', compare: FUTURO };
+  if (fTime === hoyTime) return { string: LOC.t.HOY, compare: PRESENTE };
+  if (fTime === hoyTime - MILISEGSDIARIOS) return { string: LOC.t.AYER, compare: PASADO };
+  if (fTime === hoyTime - 2 * MILISEGSDIARIOS) {
+    return { string: LOC.t.HACE_2_DIAS, compare: PASADO };
+  }
+  if (fTime === hoyTime + MILISEGSDIARIOS) return { string: LOC.t.MAÑANA, compare: FUTURO };
+  if (fTime === hoyTime + 2 * MILISEGSDIARIOS) {
+    return { string: LOC.t.PASADO_MAÑANA, compare: FUTURO };
+  }
   if (fTime > hoyTime) return { string: strFecha, compare: FUTURO };
   return { string: strFecha, compare: PASADO };
 }
 
 function conjugarVerbo(compare, pasado, presente, futuro) {
-  if (compare == PRESENTE) return presente;
-  if (compare == FUTURO) return futuro;
+  if (compare === PRESENTE) return presente;
+  if (compare === FUTURO) return futuro;
   return pasado;
 }
 
@@ -408,35 +414,42 @@ const InfoProductoHandler = {
 
     const list = await obtenerListaDeSessionOrDB(userId, NOMBRE_NEVERA_GENERICA, ATTR_NAME,
       attributesManager);
-    if (list == null) {
-      return msgAndStop(ERROR_AL_INTENTAR_RECORDAR, handlerInput);
+    if (list === null) {
+      return msgAndStop(LOC.t.ERROR_AL_INTENTAR_RECORDAR, handlerInput);
     }
 
     const timezone = await obtenerTimezoneDeSessionOrApi(requestEnvelope,
       serviceClientFactory,
       attributesManager);
+
     let encontradoQ = false;
     for (let i = 0; i < list.length; i += 1) {
-      if (list[i].name == nameProductSlot) {
+      if (list[i].name === nameProductSlot) {
         encontradoQ = true;
         const cuandoAbierto = fechaStringToVoiceString(list[i].fecha_abierto, timezone);
         const cuandoMetido = fechaStringToVoiceString(list[i].fecha_metido, timezone);
-        const cuandoCaducidadCerrado = fechaStringToVoiceString(list[i].fechaCaducidadCerrado, timezone);
+        const cuandoCaducidadCerrado = fechaStringToVoiceString(list[i].fechaCaducidadCerrado,
+          timezone);
+
+        console.log('cuandoCaducidadCerrado: ' + cuandoCaducidadCerrado);
+
         let str = `${list[i].name} `;
-        str += `${conjugarVerbo(cuandoMetido.compare, 'se metió', 'se ha metido', null)} `;
+        str += `${conjugarVerbo(cuandoMetido.compare, LOC.t.SE_METIO, LOC.t.SE_HA_METIDO, null)} `;
         str += `${cuandoMetido.string}, `;
 
         if (list[i].fecha_abierto == null) {
-          str += 'está cerrado y ';
-          str
-            += `${conjugarVerbo(cuandoCaducidadCerrado.compare, 'caducó', 'caduca', 'caducará')} `;
+          str += LOC.t.ESTA_CERRADO_Y;
+          str += `${conjugarVerbo(cuandoCaducidadCerrado.compare, LOC.t.CADUCO, LOC.t.CADUCA,
+            LOC.t.CADUCARA)} `;
           str += `${cuandoCaducidadCerrado.string}. `;
         } else {
-          const cuandoCaducidadAbierto = fechaStringToVoiceString(list[i].fechaCaducidadAbierto, timezone);
-          str += `${conjugarVerbo(cuandoAbierto.compare, 'se abrió', 'se ha abierto', null)} `;
-          str += `${cuandoAbierto.string} y `;
-          str
-            += `${conjugarVerbo(cuandoCaducidadAbierto.compare, 'caducó', 'caduca', 'caducará')} `;
+          const cuandoCaducidadAbierto = fechaStringToVoiceString(list[i].fechaCaducidadAbierto,
+            timezone);
+          str += `${conjugarVerbo(cuandoAbierto.compare, LOC.t.SE_ABRIO, LOC.t.SE_HA_ABIERTO,
+            null)} `;
+          str += `${cuandoAbierto.string} ${LOC.t.Y} `;
+          str += `${conjugarVerbo(cuandoCaducidadAbierto.compare, LOC.t.CADUCO, LOC.t.CADUCA,
+            LOC.t.CADUCARA)} `;
           str += `${cuandoCaducidadAbierto.string}. `;
         }
 
@@ -444,10 +457,13 @@ const InfoProductoHandler = {
       }
     }
 
-    if (encontradoQ == false) {
-      const str = `Producto ${nameProductSlot} no encontrado. Di 'info' y el nombre del producto.`;
+    if (encontradoQ === false) {
+      const str = LOC.t.NO_HE_ENCONTRADO_X.replace('{0}',
+        nameProductSlot) + LOC.t.DI_INFO_SEGUIDO_NOMBRE;
       return msgAndTell(str, handlerInput);
     }
+
+    return null; // caso imposible
   },
 };
 
@@ -461,30 +477,33 @@ const AbrirProductoHandler = {
     let nameProductSlot = handlerInput.requestEnvelope.request.intent.slots.nombreProducto.value;
     nameProductSlot = nameProductSlot.toLowerCase();
 
-    const fCaducidadAbiertoSlot = handlerInput.requestEnvelope.request.intent.slots.fechaCaducidadAbierto.value;
-    const { userId } = handlerInput.requestEnvelope.context.System.user;
+    const fCaducidadAbiertoSlot = handlerInput.requestEnvelope.request.intent.slots
+      .fechaCaducidadAbierto.value;
 
+    const { userId } = handlerInput.requestEnvelope.context.System.user;
     const { requestEnvelope, serviceClientFactory, attributesManager } = handlerInput;
+
     const timezone = await obtenerTimezoneDeSessionOrApi(requestEnvelope, serviceClientFactory,
       attributesManager);
 
     const list = await obtenerListaDeSessionOrDB(userId, NOMBRE_NEVERA_GENERICA, ATTR_NAME,
       attributesManager);
-    if (list == null) {
-      return msgAndStop(ERROR_AL_INTENTAR_RECORDAR, handlerInput);
+    if (list === null) {
+      return msgAndStop(LOC.t.ERROR_AL_INTENTAR_RECORDAR, handlerInput);
     }
 
     let encontradoQ = false;
     let i = 0;
     for (i = 0; i < list.length; i += 1) {
-      if (list[i].name == nameProductSlot) {
+      if (list[i].name === nameProductSlot) {
         encontradoQ = true;
         break;
       }
     }
 
-    if (encontradoQ == false) {
-      return msgAndTell(`No he encontrado ${nameProductSlot} en tu nevera. `, handlerInput);
+    if (encontradoQ === false) {
+      return msgAndTell(LOC.t.NO_HE_ENCONTRADO_X.replace('{0}', nameProductSlot),
+        handlerInput);
     }
 
     // comprobar que fecha abierto <= hoy && fecha abierto <= fechaCaducidadCerrado
@@ -494,11 +513,12 @@ const AbrirProductoHandler = {
     const timeCaducidadCerrado = fechaStringUtcToMilliseconds(list[i].fechaCaducidadCerrado);
 
     if (timeCaducidadAbierto < timeHoyUser) {
-      return msgAndTell('Ojo, me has dicho una fecha de caducidad ya pasada. No puedo guardarlo. ',
+      return msgAndTell(LOC.t.OJO_FECHA_CADUCIDAD_PASADA,
         handlerInput);
     }
     if (timeCaducidadAbierto > timeCaducidadCerrado) {
-      return msgAndTell(`Ojo, me has dicho una fecha de caducidad posterior a la fecha de caducidad inicial que era ${list[i].fechaCaducidadCerrado}. Eso no se puede. `, handlerInput);
+      return msgAndTell(LOC.t.OJO_FECHA_CADUCIDAD_ABIERTO_POSTERIOR_A_CERRADO.replace('{0}', list[i].fechaCaducidadCerrado),
+        handlerInput);
     }
 
     // actualizar list
@@ -515,11 +535,14 @@ const AbrirProductoHandler = {
 
     // guardar en bbdd. OJO! es con update.
     return myDb.updateItemWithPrimarySortKey(userId, NOMBRE_NEVERA_GENERICA, itemAttributes)
-      .then(data => msgAndStop(`Abierto ${nameProductSlot}, ahora caduca ${fCaducidadAbiertoSlot}. `,
-        handlerInput))
+      .then(() => {
+        let msg = LOC.t.ABIERTO_X_CADUCA_EN.replace('{0}', nameProductSlot);
+        msg = msg.replace('{1}', fCaducidadAbiertoSlot);
+        return msgAndStop(msg, handlerInput);
+      })
       .catch((err) => {
         console.log(`Error abriendo producto. ${err}`);
-        return msgAndStop(ERROR_AL_ABRIR_PRODUCTO, handlerInput);
+        return msgAndStop(LOC.t.ERROR_AL_ABRIR_PRODUCTO, handlerInput);
       });
   },
 };
@@ -538,13 +561,13 @@ const ListadoHandler = {
     const list = await obtenerListaDeSessionOrDB(userId, NOMBRE_NEVERA_GENERICA, ATTR_NAME,
       attributesManager);
     if (list == null) {
-      return msgAndStop(ERROR_AL_INTENTAR_RECORDAR, handlerInput);
+      return msgAndStop(LOC.t.ERROR_AL_INTENTAR_RECORDAR, handlerInput);
     }
-    if (list.length == 0) {
-      return msgAndTell(NEVERA_VACIA, handlerInput);
+    if (list.length === 0) {
+      return msgAndTell(LOC.t.NEVERA_VACIA, handlerInput);
     }
 
-    let speechText = 'En la nevera hay: ';
+    let speechText = LOC.t.EN_LA_NEVERA_HAY;
     speechText += listToVoiceString(list, 'name');
     speechText += '. ';
 
@@ -559,7 +582,7 @@ const HelpHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    return msgAndTell(HELP_MESSAGE, handlerInput);
+    return msgAndTell(LOC.t.HELP_MESSAGE, handlerInput);
   },
 };
 
@@ -570,7 +593,7 @@ const FallbackHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.FallbackIntent';
   },
   handle(handlerInput) {
-    return msgAndTell(NO_ENTIENDO_REPITE_POR_FAVOR, handlerInput);
+    return msgAndTell(LOC.t.NO_ENTIENDO_REPITE_POR_FAVOR, handlerInput);
   },
 };
 
@@ -594,12 +617,12 @@ const SessionEndedRequestHandler = {
   },
   handle(handlerInput) {
     let ret = '';
-    if (handlerInput.requestEnvelope.request.reason == 'ERROR') {
-      ret = 'La skill se cerró por un error. Lo siento, vuelve a entrar.';
-    } else if (handlerInput.requestEnvelope.request.reason == 'EXCEEDED_MAX_REPROMPTS') {
-      ret = 'La skill se cerró por falta de respuesta correcta del usuario, vuelve a entrar.';
+    if (handlerInput.requestEnvelope.request.reason === 'ERROR') {
+      ret = LOC.t.SESION_CERRADA_ERROR;
+    } else if (handlerInput.requestEnvelope.request.reason === 'EXCEEDED_MAX_REPROMPTS') {
+      ret = LOC.t.SESION_CERRADA_POR_NO_RESUESTA;
     } else {
-      ret = 'Se cerró la sesión. Vuelve a entrar.';
+      ret = LOC.t.SESION_CERRADA;
     }
     console.log(`Session ended with reason: ${JSON.stringify(handlerInput.requestEnvelope)}`);
     return msgAndStop(ret, handlerInput);
@@ -614,7 +637,37 @@ const ErrorHandler = {
   handle(handlerInput, error) {
     console.log(`Error handled: ${error.message}`); // imprimiremos el error por consola
 
-    return msgAndStop(ERROR_INESPERADO, handlerInput);
+    return msgAndStop(LOC.t.ERROR_INESPERADO, handlerInput);
+  },
+};
+
+// Initialize 't' and 'langSkill' with user language or default language.
+const myLocalizationInterceptor = {
+  process(handlerInput) {
+    const langUser = handlerInput.requestEnvelope.request.locale;
+
+    if (langUser) {
+      try {
+        LOC.t = require(`./strings/${langUser}.js`); // eslint-disable-line import/no-dynamic-require
+        LOC.langSkill = langUser;
+        return;
+      } catch (e) {
+        // console.log(`Error reading strings. langUser: ${langUser}`);
+      }
+
+      const lang = langUser.split('-')[0];
+      try {
+        LOC.t = require(`./strings/${lang}.js`); // eslint-disable-line import/no-dynamic-require
+        LOC.langSkill = lang;
+        return;
+      } catch (e) {
+        // console.log(`Error reading strings. lang: ${lang}`);
+      }
+    }
+
+    // default lang
+    LOC.langSkill = Settings.DEFAULT_LANGUAGE;
+    LOC.t = require(`./strings/${LOC.langSkill}.js`); // eslint-disable-line import/no-dynamic-require
   },
 };
 
@@ -633,6 +686,7 @@ exports.handler = skillBuilder
     FallbackHandler,
     SessionEndedRequestHandler,
   )
+  .addRequestInterceptors(myLocalizationInterceptor)
   .addErrorHandlers(ErrorHandler)
   .withApiClient(new Alexa.DefaultApiClient()) // ServiceClientFactory are only available when
   .lambda(); // you configure skill instance with an ApiClient.

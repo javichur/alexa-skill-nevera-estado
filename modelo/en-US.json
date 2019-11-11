@@ -6,28 +6,23 @@
                 {
                     "name": "AMAZON.CancelIntent",
                     "samples": [
-                        "cancela",
-                        "cancelar"
+                        "cancel"
                     ]
                 },
                 {
                     "name": "AMAZON.HelpIntent",
                     "samples": [
-                        "necesito ayuda",
+                        "help",
                         "help me",
                         "help",
-                        "ayudame",
-                        "ayuda"
+                        "I need help"
                     ]
                 },
                 {
                     "name": "AMAZON.StopIntent",
                     "samples": [
-                        "termina",
-                        "terminar",
-                        "salte",
-                        "salir",
-                        "para",
+                        "finish",
+                        "exit",
                         "stop"
                     ]
                 },
@@ -55,18 +50,22 @@
                             "type": "AMAZON.DATE",
                             "samples": [
                                 "{fechaCaducidad}",
-                                "la fecha de caducidad de {elLaProducto} {nombreProducto} es {fechaCaducidad}",
-                                "{elLaProducto} {nombreProducto} caduca {fechaCaducidad}",
-                                "{nombreProducto} caduca {fechaCaducidad}",
-                                "la fecha de caducidad es {fechaCaducidad}",
-                                "caduca {fechaCaducidad}"
+                                "the expiration date of {elLaProducto} {nombreProducto} is {fechaCaducidad}",
+                                "the expiration date of {nombreProducto} is {fechaCaducidad}",
+                                "{elLaProducto} {nombreProducto} expires {fechaCaducidad}",
+                                "{nombreProducto} expires {fechaCaducidad}",
+                                "{nombreProducto} will expire {fechaCaducidad}",
+                                "the expiration date is {fechaCaducidad}",
+                                "expires {fechaCaducidad}",
+                                "consume before {fechaCaducidad}"
                             ]
                         }
                     ],
                     "samples": [
-                        "{mete} {nombreProducto} que caduca {fechaCaducidad}",
-                        "{mete} {elLaProducto} {nombreProducto}",
-                        "{mete} {nombreProducto}"
+                        "{mete} {nombreProducto} that will expire {fechaCaducidad}",
+                        "{mete} {nombreProducto} that expires {fechaCaducidad}",
+                        "{mete} {nombreProducto}",
+                        "{mete} {elLaProducto} {nombreProducto}"
                     ]
                 },
                 {
@@ -86,8 +85,8 @@
                         }
                     ],
                     "samples": [
-                        "{saca} {elLaProducto} {nombreProducto}",
-                        "{saca} {nombreProducto}"
+                        "{saca} {nombreProducto}",
+                        "{saca} {elLaProducto} {nombreProducto}"
                     ]
                 },
                 {
@@ -97,10 +96,9 @@
                             "name": "nombreProducto",
                             "type": "AMAZON.Food",
                             "samples": [
-                                "la {nombreProducto}",
-                                "el {nombreProducto}",
-                                "se llama {nombreProducto}",
-                                "{nombreProducto}"
+                                "{nombreProducto}",
+                                "the {nombreProducto}",
+                                "it's called {nombreProducto}"
                             ]
                         },
                         {
@@ -121,17 +119,20 @@
                     "name": "ListadoIntent",
                     "slots": [],
                     "samples": [
-                        "ver listado",
-                        "lista completa",
-                        "listado completo",
-                        "listado",
-                        "dime la lista de productos",
-                        "dime la lista de cosas",
-                        "dime la lista",
-                        "dime qué hay",
-                        "dime qué tengo",
-                        "dime qué tengo en la nevera",
-                        "qué hay en la nevera"
+                        "show list",
+                        "see list",
+                        "see the list",
+                        "complete list",
+                        "full listing",
+                        "list",
+                        "listing",
+                        "tell me the list of products",
+                        "tell me the list of things",
+                        "tell me the list",
+                        "tell me what's inside",
+                        "tell me what i have",
+                        "tell me what I have in the fridge",
+                        "what is in the fridge"
                     ]
                 },
                 {
@@ -145,10 +146,9 @@
                             "name": "nombreProducto",
                             "type": "AMAZON.Food",
                             "samples": [
-                                "la {nombreProducto}",
-                                "el {nombreProducto}",
-                                "se llama {nombreProducto}",
-                                "{nombreProducto}"
+                                "the {nombreProducto}",
+                                "{nombreProducto}",
+                                "it's called {nombreProducto}"
                             ]
                         },
                         {
@@ -159,12 +159,12 @@
                             "name": "fechaCaducidadAbierto",
                             "type": "AMAZON.DATE",
                             "samples": [
-                                "La nueva fecha de caducidad será {fechaCaducidadAbierto}",
-                                "La nueva fecha de caducidad es {fechaCaducidadAbierto}",
-                                "La nueva fecha será {fechaCaducidadAbierto}",
-                                "La nueva fecha es {fechaCaducidadAbierto}",
-                                "{elLaProducto} {nombreProducto} caducará {fechaCaducidadAbierto}",
-                                "{nombreProducto} caduca {fechaCaducidadAbierto}",
+                                "The new expiration date will be {fechaCaducidadAbierto}",
+                                "The new expiration date is {fechaCaducidadAbierto}",
+                                "The new date will be {fechaCaducidadAbierto}",
+                                "The new date is {fechaCaducidadAbierto}",
+                                "{nombreProducto} will expire {fechaCaducidadAbierto}",
+                                "{nombreProducto} expires {fechaCaducidadAbierto}",
                                 "{fechaCaducidadAbierto}"
                             ]
                         }
@@ -181,42 +181,47 @@
                     "values": [
                         {
                             "name": {
-                                "value": "nueva"
+                                "value": "new"
                             }
                         },
                         {
                             "name": {
-                                "value": "añadir"
+                                "value": "add"
                             }
                         },
                         {
                             "name": {
-                                "value": "añade"
+                                "value": "adds"
                             }
                         },
                         {
                             "name": {
-                                "value": "incluye"
+                                "value": "include"
                             }
                         },
                         {
                             "name": {
-                                "value": "nuevo"
+                                "value": "I put"
                             }
                         },
                         {
                             "name": {
-                                "value": "meto"
+                                "value": "I put in"
                             }
                         },
                         {
                             "name": {
-                                "value": "meter"
+                                "value": "place"
                             }
                         },
                         {
                             "name": {
-                                "value": "mete"
+                                "value": "insert"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "introduce"
                             }
                         }
                     ]
@@ -226,37 +231,32 @@
                     "values": [
                         {
                             "name": {
-                                "value": "producto"
+                                "value": "product"
                             }
                         },
                         {
                             "name": {
-                                "value": "un producto"
+                                "value": "a product"
                             }
                         },
                         {
                             "name": {
-                                "value": "una"
+                                "value": "one"
                             }
                         },
                         {
                             "name": {
-                                "value": "un"
+                                "value": "one product"
                             }
                         },
                         {
                             "name": {
-                                "value": "el producto"
+                                "value": "the product"
                             }
                         },
                         {
                             "name": {
-                                "value": "la"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "el"
+                                "value": "the"
                             }
                         }
                     ]
@@ -266,73 +266,77 @@
                     "values": [
                         {
                             "name": {
-                                "value": "olvida",
+                                "value": "forget",
                                 "synonyms": [
-                                    "olvidar"
+                                    "forgets"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "comido",
+                                "value": "eaten",
                                 "synonyms": [
-                                    "ya nos hemos comido",
-                                    "nos hemos comido",
-                                    "ya me he comido",
-                                    "me he comido"
+                                    "we have already eaten",
+                                    "we have eaten",
+                                    "I have already eaten",
+                                    "we have already thrown"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "tira",
+                                "value": "throw",
                                 "synonyms": [
-                                    "ya hemos tirado",
-                                    "ya tiré",
-                                    "tirar"
+                                    "we have already thrown",
+                                    "I already threw away",
+                                    "pull",
+                                    "and we have thrown",
+                                    "we pull"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "acabado",
+                                "value": "finish",
                                 "synonyms": [
-                                    "ya nos hemos acabado",
-                                    "ya me he acabado",
-                                    "nos hemos acabado",
-                                    "me he acabado"
+                                    "we are done",
+                                    "I'm done",
+                                    "finished"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "elimina",
+                                "value": "remove",
                                 "synonyms": [
-                                    "eliminar"
+                                    "removing",
+                                    "take out",
+                                    "do away with",
+                                    "delete"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "quita",
+                                "value": "take off",
                                 "synonyms": [
-                                    "quitar"
+                                    "take from"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "borra",
+                                "value": "erase",
                                 "synonyms": [
-                                    "borrar"
+                                    "wipe out"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "saca",
+                                "value": "bring out",
                                 "synonyms": [
-                                    "sacar"
+                                    "extract"
                                 ]
                             }
                         }
@@ -343,49 +347,44 @@
                     "values": [
                         {
                             "name": {
-                                "value": "empecé"
+                                "value": "I started"
                             }
                         },
                         {
                             "name": {
-                                "value": "acabo de empezar",
+                                "value": "I just started",
                                 "synonyms": [
-                                    "empiezo",
-                                    "acabamos de empezar"
+                                    "I start",
+                                    "we have just started"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "acabo de abrir",
+                                "value": "I just opened",
                                 "synonyms": [
-                                    "acabamos de abrir"
+                                    "we just opened"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "abrí"
+                                "value": "I opened"
                             }
                         },
                         {
                             "name": {
-                                "value": "he abierto"
+                                "value": "I open"
                             }
                         },
                         {
                             "name": {
-                                "value": "abro"
+                                "value": "open"
                             }
                         },
                         {
                             "name": {
-                                "value": "abrir"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "abre"
+                                "value": "opened"
                             }
                         }
                     ]
@@ -395,12 +394,12 @@
                     "values": [
                         {
                             "name": {
-                                "value": "dime info"
+                                "value": "tell me info"
                             }
                         },
                         {
                             "name": {
-                                "value": "dame info"
+                                "value": "give me info"
                             }
                         },
                         {
@@ -410,70 +409,72 @@
                         },
                         {
                             "name": {
-                                "value": "información"
+                                "value": "information"
                             }
                         },
                         {
                             "name": {
-                                "value": "dime información de"
+                                "value": "tell me information about"
                             }
                         },
                         {
                             "name": {
-                                "value": "dame información de"
+                                "value": "give me information about"
                             }
                         },
                         {
                             "name": {
-                                "value": "cuándo hice",
+                                "value": "When I made",
                                 "synonyms": [
-                                    "cuándo cociné"
+                                    "When did I cook",
+                                    "when I cooked",
+                                    "When did I make"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "cuándo guardé",
+                                "value": "When did I keep",
                                 "synonyms": [
-                                    "cuándo guardamos"
+                                    "When did we keep"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "cuándo traje",
+                                "value": "when I brought",
                                 "synonyms": [
-                                    "cuándo trajimos"
+                                    "when we brought the meat"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "cuándo compré",
+                                "value": "when did i buy",
                                 "synonyms": [
-                                    "cuándo compramos"
+                                    "when did we buy"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "cuándo añadí",
+                                "value": "when did i add",
                                 "synonyms": [
-                                    "cuándo añadimos"
+                                    "when did we add"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "cuándo di de alta",
+                                "value": "When did I register",
                                 "synonyms": [
-                                    "cuándo dimos de alta"
+                                    "When did we register"
                                 ]
                             }
                         },
                         {
                             "name": {
-                                "value": "cuándo"
+                                "value": "when"
                             }
                         }
                     ]
@@ -636,7 +637,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "¿Cómo se llama el producto que tengo que borrar?"
+                        "value": "What is the name of the product I have to delete?"
                     }
                 ]
             },
@@ -645,7 +646,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "¿Cómo se llama el producto nuevo?"
+                        "value": "What is the name of the new product?"
                     }
                 ]
             },
@@ -654,11 +655,11 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "¿qué fecha de caducidad tiene?"
+                        "value": "What expiration date do you have?"
                     },
                     {
                         "type": "PlainText",
-                        "value": "¿cuál es su fecha de caducidad?"
+                        "value": "What is its expiration date?"
                     }
                 ]
             },
@@ -667,7 +668,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "¿Cómo se llama el producto que quieres consultar?"
+                        "value": "What is the name of the product you want to consult?"
                     }
                 ]
             },
@@ -676,7 +677,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "¿Cómo se llama el producto que acabas de abrir?"
+                        "value": "What is the name of the product you just opened?"
                     }
                 ]
             },
@@ -685,7 +686,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "Dime una fecha de caducidad válida. También puedes decir 'próximo lunes', 'hoy', o 'mañana'."
+                        "value": "Tell me a valid expiration date. You can also say 'next Monday', 'today', or 'tomorrow'."
                     }
                 ]
             },
@@ -694,11 +695,11 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "¿Cuándo caducará ahora {nombreProducto} ?"
+                        "value": "When will {nombreProducto} expire now?"
                     },
                     {
                         "type": "PlainText",
-                        "value": "¿Cuál será su fecha de caducidad ahora que {nombreProducto} está abierto?"
+                        "value": "What will be its expiration date now that {nombreProducto} is open?"
                     }
                 ]
             }
