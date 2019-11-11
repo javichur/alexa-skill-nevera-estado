@@ -1,5 +1,5 @@
 const s = {
-  SKILL_NAME: 'Voice fridge',
+  SKILL_NAME: 'Voice Fridge',
   DIME_POR_EJEMPLO: 'Tell me for example: "add milk", "I open the mayonnaise", "info guacamole", "delete the chicken", "show list" or "exit". What do you say?',
   HELP_MESSAGE: 'Say here the food you buy, when you opened it and when it expires. You will waste less food and avoid possible food poisoning. ',
   STOP_MESSAGE: '<say-as interpret-as="interjection">See you later</say-as>',
@@ -49,5 +49,6 @@ const s = {
   CADUCAN_PASADO_MANANA: 'expire the day after tomorrow',
   YA_HA_CADUCADO: 'has already expired',
   YA_HAN_CADUCADO: 'have already expired',
+  HINT: 'Try "add milk", "open mayonnaise", "info guacamole", "delete chicken", "show list"',
 };
 module.exports = s;

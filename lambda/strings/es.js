@@ -49,4 +49,5 @@ module.exports = {
   CADUCAN_PASADO_MANANA: 'caducan pasado mañana',
   YA_HA_CADUCADO: 'ya ha caducado',
   YA_HAN_CADUCADO: 'ya han caducado',
+  HINT: 'Di "meto leche", "abro la mayonesa", "info guacamole", "borra pollo", "ver listado"',
 };

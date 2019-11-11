@@ -34,19 +34,29 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 const MILISEGSDIARIOS = 86400000;
 
 function msgAndTell(msg, handlerInput) {
+  const AplTemplates = require('./apl/aplTemplates.js'); // eslint-disable-line global-require
+  return AplTemplates.getAplTextAndHintOrVoice(handlerInput, LOC.t.SKILL_NAME, msg,
+    LOC.t.HINT, msg, false);
+  /*
   return handlerInput.responseBuilder
     .speak(msg + LOC.t.DIME_POR_EJEMPLO)
     .withSimpleCard(LOC.t.SKILL_NAME, msg)
     .reprompt(msg)
     .getResponse();
+    */
 }
 
 function msgAndStop(msg, handlerInput) {
+  const AplTemplates = require('./apl/aplTemplates.js'); // eslint-disable-line global-require
+  return AplTemplates.getAplTextAndHintOrVoice(handlerInput,
+    LOC.t.SKILL_NAME, msg, LOC.t.HINT, msg + LOC.t.STOP_MESSAGE, true);
+/*
   return handlerInput.responseBuilder
     .speak(msg + LOC.t.STOP_MESSAGE)
     .withSimpleCard(LOC.t.SKILL_NAME, msg)
     .withShouldEndSession(true)
     .getResponse();
+    */
 }
 
 function capitalize(string) {

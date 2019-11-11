@@ -1,0 +1,13 @@
+{
+  "data": {
+    "type": "object",
+    "objectId": "templateTextAndHint",
+    "backgroundImageSmall": "https://www.valenciabonita.es/wp-content/uploads/2016/09/561643013fca6_1420_.jpg",
+    "backgroundImage": "https://www.valenciabonita.es/wp-content/uploads/2016/09/561643013fca6_1420_.jpg",
+    "title": "<title>",
+    "text": "<text>",
+    "logoUrl": "https://images-na.ssl-images-amazon.com/images/I/71Eu7ET7WUL.png",
+    "hintText": "<hintText>",
+    "overlayColor": "rgba(black,0.5)"
+  }
+}
